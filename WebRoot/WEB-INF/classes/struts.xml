@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+    "http://struts.apache.org/dtds/struts-2.1.dtd">
+    
+    <struts>
+        <constant name="struts.devMode" value="true"></constant>
+        <constant name="struts.custom.i18n.resources"  value="app"></constant>
+         <!-- 记得加上，否则国际会中文乱码 -->
+        <constant name="struts.i18n.encoding" value="utf-8"></constant>
+        <!-- 管理员 -->
+       <package name="default" extends="struts-default">
+			<global-results>
+				<!--  <result name="error">common/error.jsp</result>-->
+				<result name="failed">../common/error.jsp</result>
+				<result name="exception">/common/error.jsp</result>
+			</global-results>
+    		<global-exception-mappings>  
+                 <exception-mapping result="exception" exception="java.lang.Exception">  
+                 </exception-mapping>
+    		</global-exception-mappings> 
+		</package>
+        <package name="manager" namespace="/manager" extends="default">
+            <action name="*_*" class="action.{1}Action" method="{2}">
+                <result name="logout">../common/login.jsp</result>
+                <result name="success" type="redirectAction">{1}_list</result><!-- 添加成功和修改成功后 -->
+                <result name="userlist">User_list.jsp</result>
+                <result name="updateInput">User_update.jsp</result>
+                <result name="addInput0">ItemCategory_add.jsp</result>
+                <result name="updateInput0">ItemCategory_update.jsp</result>
+                <result name="itemCategorylist0">ItemCategory_list.jsp</result>
+                
+           </action>
+        </package>
+        
+        <!-- 普通家庭成员 -->
+        <package name="familyMember" namespace="/familyMember" extends="default">
+            <action name="*_*" class="action.{1}Action" method="{2}">
+                <result name="success" type="chain">{1}_list</result><!-- 添加成功和删除成功后 -->
+                <result name="accountlist">Account_list.jsp</result>
+                <result name="usualActivitylist">UsualActivity_list.jsp</result>
+                <result name="updateInputUA0">UsualActivity_update.jsp</result>
+                <result name="monthCount">UACountMonth_list.jsp</result>
+                <result name="yearCount">UACountYear_list.jsp</result>
+                <result name="user">User_loadByID.jsp</result>
+                <result name="updPaswSuccess" type="chain">User_loadByID</result>
+            </action>
+        </package>
+        
+        <!-- 家长 -->
+        <package name="houseHold" namespace="/houseHold" extends="default">
+            
+            <action name="*_*" class="action.{1}Action" method="{2}">
+                <result name="success" type="chain">{1}_list</result><!-- 添加成功和删除成功后 -->
+                <result name="accountlist">Account_list.jsp</result>
+                <result name="usualActivitylist">UsualActivity_list.jsp</result>
+                <result name="loanlist">Loan_list.jsp</result>
+                <result name="repaymentlist">Repayment_list.jsp</result>
+                <result name="repaymentaddInput">Repayment_add.jsp</result>
+                <result name="updateInputUA0">UsualActivity_update.jsp</result>
+                <result name="updateInputLoan0">Loan_update.jsp</result>
+                <result name="monthCount">UACountMonth_list.jsp</result>
+                <result name="yearCount">UACountYear_list.jsp</result>
+                <result name="user">User_loadByID.jsp</result>
+                <result name="updPaswSuccess" type="chain">User_loadByID</result>
+            </action>
+        </package>
+        
+        
+        <package name="json" namespace="/json" extends="json-default">
+            <action name="ItemCategory_addInput" class="action.ItemCategoryAction" method="addInput">
+            	 <result name="addInput1" type="json"></result> 
+            	 <result name="updateInput1" type="json"></result>
+            </action>
+            <action name="ItemCategory_secondClassList" class="action.ItemCategoryAction" method="secondClassList">
+            	 <result name="secondClassList" type="json"></result>
+            </action>
+            <action name="ItemCategory_list" class="action.ItemCategoryAction" method="list">
+            	 <result name="itemCategorylist1" type="json"></result>
+            </action>
+            <action name="UsualActivity_list" class="action.UsualActivityAction" method="list">
+            	 <result name="usualActivitylist1" type="json"></result>
+            </action>
+            <action name="Loan_list" class="action.LoanAction" method="list">
+            	 <result name="loanlist1" type="json"></result>
+            </action>
+            <action name="Repayment_list" class="action.RepaymentAction" method="list">
+            	 <result name="repaymentlist1" type="json"></result>
+            </action>
+            <action name="UACountMonth_monthCount" class="action.UACountMonthAction" method="monthCount">
+            	 <result name="monthCount1" type="json"></result>
+            </action>
+            <action name="UACountMonth_yearCount" class="action.UACountMonthAction" method="yearCount">
+            	 <result name="yearCount1" type="json"></result>
+            </action>
+            <action name="Account_list" class="action.AccountAction" method="list">
+            	 <result name="accountlistjson" type="json"></result>
+            </action>
+            <action name="name_unique" class="action.CheckedAction" method="nameUnique">
+                <result name="nameUnique" type="json">
+                    	<param name="root">checked</param>
+                </result>
+            </action>
+        </package> 
+        
+         <!-- 登陆 -->
+        <package name="login" namespace="/" extends="default">
+            <action name="loginAction" class="action.UserAction" method="login">
+                <result name="managersuccess">/manager/index.jsp</result>
+                <result name="familyMembersuccess">/familyMember/index.jsp</result>
+                <result name="houseHoldsuccess">/houseHold/index.jsp</result>
+                <result name="error">/common/login.jsp</result>
+            </action>
+        </package>
+       
+    </struts>
